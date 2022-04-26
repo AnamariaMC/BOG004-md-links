@@ -1,24 +1,160 @@
-const { fstat } = require('fs');
+// Módulos de node
 
-const mdlinks = (args) => {
-    console.log('llego a md');
-    //console.log('INFO DESDE MD', args)
-    const path = require('path');
-    const fs = require('fs');//función sistem
-    //traemos la ruta que nos pasa el array desde el erg[2]
-    const terminalPath = args[2];
+const { converterPath,
+    validatePath, 
+    fileDirector, 
+    readDirFiles,
+    readFile, 
+    isFileMd,
+} = require('./nodemethods');
 
-    //conversión de ruta relativa a absoluta 
-    const terminalPathAbsolute = path.resolve(terminalPath).normalize();
-    console.log('PAAAAATH', terminalPathAbsolute);
+//Función mdLinks
+const mdLinks = (args) => new Promise((resolve, reject) => { 
+    
+  const path = require("path");
 
-    fs.stat(terminalPathAbsolute, (err, stats) => {
-        if (err) throw err;
-        console.log('es directorio?', stats.isDirectory());
-    });
+  // captura de la ruta a partir del array de args
+  const catchedPath = args[2];
+  console.log(catchedPath);
 
-} 
-module.exports = mdlinks;
+  console.log('Ruta absolua? ', path.isAbsolute(catchedPath));
+
+  // invoca funcion converterPath
+  const absolutePath = converterPath(catchedPath);
+  console.log('PATH', absolutePath)
+
+  // invoca funcion validatePath
+  const resultValidatePath = validatePath(absolutePath);
+  console.log('Ruta valida? ', resultValidatePath);
+
+    //array de rutas
+  const pathArray = []
+
+  //condicional para verificar si la ruta es valida
+  if(resultValidatePath){
+    fileDirector(absolutePath)
+      .then((isDirResult) => {
+          if(isDirResult){
+              console.log('Recursividad Revisar');
+              const dirFiles = readDirFiles(absolutePath);
+              resolve(dirFiles);
+              //debe retornar un array con una o mas rutas
+          }else {
+              console.log('Guardar ruta md en array');
+              const fileMdResult = isFileMd(absolutePath);
+              pathArray.push(fileMdResult);
+              console.log(pathArray);
+              resolve(fileMdResult);
+          }
+      })
+      .catch((error) => {
+          console.log('soy error', error);
+      });
+  }else{
+      const invalidPath = 'Ruta no valida'; 
+      console.log(invalidPath);
+      return invalidPath;
+  }
+
+});
+module.exports = mdLinks; 
+
+
+
+// //captura de la ruta a partir del array de args
+// const terminalPath = args[2];
+
+// //Resuelve y normaliza la ruta
+// const pathAbsolute = path.resolve(terminalPath).normalize();
+// console.log('Hola ya soy absoluta', pathAbsolute);
+
+// //
+
+// // verifica si existe la ruta
+// const validatePath = (path) => fs.existsSync(path);
+
+
+// // función para saber si es un directorio o archivo. Si es directorio : true y si es archivo: false
+// const isFileOrDirectory =  (pathToCheck) =>{
+//     fs.stat(pathToCheck, (err, stats) => {
+//         if (err) throw err;
+//         console.log('soy directorio?', stats.isDirectory());
+//     });
+// }
+// // función para leer el contenido de mi archivo
+// const readFile = (pathToRead) => {
+//     fs.readFile(pathToRead, 'utf8', function(err, data) {
+//     if (err) throw err;
+//     console.log(data);
+//     });
+// }
+// // Guardo el rersultado e invoco la función pasando conmo argumento pathAbsolute
+// const resultValidatePath  = validatePath(pathAbsolute);
+
+// if(resultValidatePath === true ){
+//     isFileOrDirectory(pathAbsolute)
+//     readFile(pathAbsolute);
+// }else{
+//     console.log('Fin del programa');
+// }
+
+
+
+
+// // Function para listar los nombres d elos archivos de un directorio 
+// const contenstDir = () => {
+//     filenames = fs.readdirSync(__dirname);
+
+//     console.log("Archivos del directorio:");
+//     filenames.forEach(file => {
+//     console.log(file);
+//     });
+
+//     console.log("Documentos .md extension:");
+//     filenames.forEach(file => {
+//     if (path.extname(file) == ".md")
+//     console.log(file);
+//     })
+
+//     // Function to get current filenames in directory with "withFileTypes" set to "true" 
+//     // fileObjs = fs.readdirSync(__dirname, { withFileTypes: true });
+//     // console.log("\nCurrent directory files:");
+//     // fileObjs.forEach(file => {
+//     // console.log(file);
+//     // });
+// }
+// contenstDir()  
+
+// const extension = path.extname('./prueba.md'); //obtener la extención del archivo
+// console.log(extension);
+
+// otenemos la ruta absoluta del directorio y del archivo actual
+// const dirName = path.dirname(__dirname); //El dirname obtiene la ruta  
+// const fileName = path.dirname(__filename); //__filename es el archivo actual en el que estoy
+// console.log('directory-name :', dirName, 'file-name :', fileName);
+
+
+// const { fstat } = require('fs');
+
+// const mdlinks = (args) => {
+//     console.log('llego a md');
+//     //console.log('INFO DESDE MD', args)
+//     const path = require('path');
+//     const fs = require('fs');//función sistem
+//     //traemos la ruta que nos pasa el array desde el erg[2]
+//     const terminalPath = args[2];
+
+//     //conversión de ruta relativa a absoluta 
+//     const terminalPathAbsolute = path.resolve(terminalPath).normalize();
+//     console.log('PAAAAATH', terminalPathAbsolute);
+
+//     fs.stat(terminalPathAbsolute, (err, stats) => {
+//         if (err) throw err;
+//         console.log('es directorio?', stats.isDirectory());
+//     });
+
+// } 
+// module.exports = mdlinks;
 
 
 // //modulos de Node
