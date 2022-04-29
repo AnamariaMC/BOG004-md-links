@@ -42,13 +42,15 @@ const getMdFiles = (isPath) => {
                 allMdFiles.push(isPath);
             }
         }else {
-            let absolutePath = dirFiles.map((fileName) => path.join(isPath, fileName));
+            const readDirectorFiles = fs.readdirSync(isPath);
+            let absolutePath = readDirectorFiles.map((fileName) => path.join(isPath, fileName));
             absolutePath.forEach ((fileNamePath) => {
                 mdCycle(fileNamePath)
             });
         };
     };
     mdCycle(isPath);
+    console.log('que me retorna getMdFiles : ', allMdFiles)
     return allMdFiles // la función retorna un array con todos los archivos .md
 };
 

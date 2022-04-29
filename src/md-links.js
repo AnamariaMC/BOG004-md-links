@@ -13,7 +13,8 @@ const mdLinks = (args) => new Promise(() => {
   const absolutePath = converterPathAbsolut(catchedPath);
   console.log('PATH', absolutePath)
 
-  console.log('todos los .md', getMdFiles )
+  const mdFiles = getMdFiles(catchedPath)
+  console.log('todos los .md', mdFiles);
 
 
 
