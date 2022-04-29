@@ -1,63 +1,53 @@
 // Módulos de node
 
-const { converterPath,
-    validatePath, 
-    fileDirector, 
-    readDirFiles,
-    readFile, 
-    isFileMd,
+const { converterPathAbsolut, 
+    getMdFiles,
 } = require('./nodemethods');
 
 //Función mdLinks
-const mdLinks = (args) => new Promise((resolve, reject) => { 
-    
-  const path = require("path");
-
+const mdLinks = (args) => new Promise(() => { 
   // captura de la ruta a partir del array de args
   const catchedPath = args[2];
-  console.log(catchedPath);
-
-  console.log('Ruta absolua? ', path.isAbsolute(catchedPath));
-
-  // invoca funcion converterPath
-  const absolutePath = converterPath(catchedPath);
+  
+  // invoca funcion converterPathAbsolut
+  const absolutePath = converterPathAbsolut(catchedPath);
   console.log('PATH', absolutePath)
 
-  // invoca funcion validatePath
-  const resultValidatePath = validatePath(absolutePath);
-  console.log('Ruta valida? ', resultValidatePath);
+  console.log('todos los .md', getMdFiles )
 
-    //array de rutas
-  const pathArray = []
 
-  //condicional para verificar si la ruta es valida
-  if(resultValidatePath){
-    fileDirector(absolutePath)
-      .then((isDirResult) => {
-          if(isDirResult){
-              console.log('Recursividad Revisar');
-              const dirFiles = readDirFiles(absolutePath);
-              resolve(dirFiles);
-              //debe retornar un array con una o mas rutas
-          }else {
-              console.log('Guardar ruta md en array');
-              const fileMdResult = isFileMd(absolutePath);
-              pathArray.push(fileMdResult);
-              console.log(pathArray);
-              resolve(fileMdResult);
-          }
-      })
-      .catch((error) => {
-          console.log('soy error', error);
-      });
-  }else{
-      const invalidPath = 'Ruta no valida'; 
-      console.log(invalidPath);
-      return invalidPath;
-  }
 
 });
-module.exports = mdLinks; 
+module.exports = mdLinks;
+    
+
+//   //condicional para verificar si la ruta es valida
+//   if(resultValidatePath){
+//     fileDirector(absolutePath)
+//       .then((isDirResult) => {
+//           if(isDirResult){
+//               console.log('Recursividad Revisar');
+//               const dirFiles = readDirFiles(absolutePath);
+//               resolve(dirFiles);
+//               //debe retornar un array con una o mas rutas
+//           }else {
+//               console.log('Guardar ruta md en array');
+//               const fileMdResult = isFileMd(absolutePath);
+//               pathArray.push(fileMdResult);
+//               console.log(pathArray);
+//               resolve(fileMdResult);
+//           }
+//       })
+//       .catch((error) => {
+//           console.log('soy error', error);
+//       });
+//   }else{
+//       const invalidPath = 'Ruta no valida'; 
+//       console.log(invalidPath);
+//       return invalidPath;
+//   }
+
+ 
 
 
 
