@@ -34,24 +34,21 @@ const mdFiles = (isPath) => {
 }
 
 //función con recursividad para recorrer las carpetas y archivos consiguiendo los .md 
-const getMdFiles = (isPath) => {
-    let allMdFiles = [];
-    const mdCycle = (isPath) => {
+const getMdFiles = (isPath, allMdFiles) => {
         if (!isDirectory(isPath)) {
-            if(mdFiles) {
+            if(mdFiles(isPath)) {
                 allMdFiles.push(isPath);
             }
         }else {
+            //leer de forma asincrónica el contenido de un directorio
             const readDirectorFiles = fs.readdirSync(isPath);
             let absolutePath = readDirectorFiles.map((fileName) => path.join(isPath, fileName));
-            absolutePath.forEach ((fileNamePath) => {
-                mdCycle(fileNamePath)
+            absolutePath.forEach((fileNamePath) => {
+                getMdFiles(fileNamePath, allMdFiles)
             });
         };
-    };
-    mdCycle(isPath);
-    console.log('que me retorna getMdFiles : ', allMdFiles)
-    return allMdFiles // la función retorna un array con todos los archivos .md
+    return allMdFiles 
+    // la función retorna un array con todos los archivos .md
 };
 
 module.exports = {
@@ -64,23 +61,12 @@ module.exports = {
     
 };
 
+
 // //función para leer contenido de una rchivo
-// const readFile = (pathToRead) => {
-//     fs.readFile(pathToRead, 'utf8', function(err,data) {
+// const readFile = (ispath) => {
+//     fs.readFile(ispath, 'utf8', function(err,data) {
 //         if (err) throw err;
 //         console.log(data);
 //         return data;
 //     });
 // }
-
-// // funcion para revisar si es archivo md y leer su contenido
-// const isFileMd = (filePath) => {
-//     const fileExtensionResult = fileExtension(filePath);
-//     if(fileExtensionResult === '.md'){
-//         return filePath;
-//     }else{
-//         const isFileMdError = 'Archivo no tiene extención .md';
-//         return isFileMdError;
-//     }
-// };
-
