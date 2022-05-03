@@ -51,22 +51,38 @@ const getMdFiles = (isPath, allMdFiles) => {
     // la función retorna un array con todos los archivos .md
 };
 
+//leer los archivos y extraer los links. Esta funcion me retorna un arreglo de objetos con los links encontados.
+const readLinks = (isPath) => {
+    const regExp1 = new RegExp (/\[([\w\s\d.()]+)\]\(((?:\/|https?:\/\/)[\w\d./?=#&_%~,.:-]+)\)/mg);//link
+    const regExp2 = new RegExp (/\[[\w\s\d.()]+\]/);//texto
+    const regExp3 = new RegExp (/\(((?:\/|https?:\/\/)[\w\d./?=#&_%~,.:-]+)\)/mg);//ruta
+    const fileContent = fs.readFileSync(isPath, 'utf-8');//lee el archivo
+    //console.log('fileContent: ', fileContent);
+    const arrayLinks = fileContent.match(regExp1);/* extraigo los links que coincidan con mi expresion regular
+        match() se usa para obtener todas las ocurrencias de una expresión regular dentro de una cadena.*/
+    console.log('arrayLinks: ', arrayLinks);
+    if (arrayLinks === null) {
+        console.log('----| | ✧ ✿ ...La ruta ingresada no tiene links... ✿ ✧ | |---');
+        return [];
+    }
+    else {
+        return arrayLinks.map((myLinks) => {
+        const myhref = myLinks.match(regExp3).join().slice(1, -1);//URL encontradas
+        const mytext = myLinks.match(regExp2).join().slice(1, -1);//Texto que aparecía dentro del link
+        
+        return {
+            href: myhref,
+            text: mytext,
+            fileName: isPath//Ruta del archivo donde se encontró el link.
+        }
+    })};
+};
+
 module.exports = {
     converterPathAbsolut, 
     validatePath,
     isDirectory,
     dirFiles,
     getMdFiles,
-    
-    
+    readLinks,      
 };
-
-
-// //función para leer contenido de una rchivo
-// const readFile = (ispath) => {
-//     fs.readFile(ispath, 'utf8', function(err,data) {
-//         if (err) throw err;
-//         console.log(data);
-//         return data;
-//     });
-// }

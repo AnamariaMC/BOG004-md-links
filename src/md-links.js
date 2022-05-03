@@ -2,6 +2,7 @@
 
 const { converterPathAbsolut, 
     getMdFiles,
+    readLinks,
 } = require('./nodemethods');
 
 //Función mdLinks
@@ -16,9 +17,13 @@ const mdLinks = (args) => new Promise(() => {
   const mdFiles = getMdFiles(catchedPath, [])
   console.log('todos los .md', mdFiles);
 
-
-
+  let arrayLinks = mdFiles.map((file) => {
+    console.log('que es el file', readLinks(file));  
+    return readLinks(file)
+  }).flat();
+  console.log('TODOS LOS LINKS', arrayLinks);
 });
+
 module.exports = mdLinks;
     
 
