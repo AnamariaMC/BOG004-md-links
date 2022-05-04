@@ -52,17 +52,17 @@ const getMdFiles = (isPath, allMdFiles) => {
 };
 
 //leer los archivos y extraer los links. Esta funcion me retorna un arreglo de objetos con los links encontados.
-const readLinks = (isPath) => {
+const readLinks = (fileContent, isPath) => {
     const regExp1 = new RegExp (/\[([\w\s\d.()]+)\]\(((?:\/|https?:\/\/)[\w\d./?=#&_%~,.:-]+)\)/mg);//link
     const regExp2 = new RegExp (/\[[\w\s\d.()]+\]/);//texto
     const regExp3 = new RegExp (/\(((?:\/|https?:\/\/)[\w\d./?=#&_%~,.:-]+)\)/mg);//ruta
-    const fileContent = fs.readFileSync(isPath, 'utf-8');//lee el archivo
-    //console.log('fileContent: ', fileContent);
+    const Content = fileContent;//lee el archivo
+    //console.log('fileContent: ', Content);
     const arrayLinks = fileContent.match(regExp1);/* extraigo los links que coincidan con mi expresion regular
         match() se usa para obtener todas las ocurrencias de una expresión regular dentro de una cadena.*/
-    console.log('arrayLinks: ', arrayLinks);
+    //console.log('arrayLinks: ', arrayLinks);
     if (arrayLinks === null) {
-        console.log('----| | ✧ ✿ ...La ruta ingresada no tiene links... ✿ ✧ | |---');
+        //console.log('----| | ✧ ✿ ...La ruta ingresada no tiene links... ✿ ✧ | |---');
         return [];
     }
     else {
@@ -78,11 +78,30 @@ const readLinks = (isPath) => {
     })};
 };
 
+//-----Leer contenido de un archivo------//
+const readFileContent = (arrayMds) => new Promise ((resolve) => {
+    const mdArray = [];
+    arrayMds.forEach((element) => {
+        fs.readFile(element, 'utf8', function(err, data){
+            if (err){
+                const errorMessage = '| ✧ Error ✧  |';
+                console.log(errorMessage);
+            } else {
+                mdArray.push(readLinks(data, element));
+                if (arrayMds.length === mdArray.length){
+                    resolve(mdArray.flat());
+                }
+            }
+        });
+    })
+});
+
 module.exports = {
     converterPathAbsolut, 
     validatePath,
     isDirectory,
     dirFiles,
     getMdFiles,
-    readLinks,      
+    readLinks, 
+    readFileContent,     
 };
