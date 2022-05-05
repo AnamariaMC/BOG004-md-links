@@ -1,6 +1,7 @@
 // metodos node
 const fs = require('fs');
 const path = require("path");
+const { default: fetch } = require("node-fetch");
 
 //función para verificar si la ruta existe
 const validatePath = (isPath) => fs.existsSync(isPath);
@@ -27,7 +28,7 @@ const dirFiles = (isPath) => {
     return dirFilesArray
 }
 
-//muestra los archivos md dentro del  
+//muestra los archivos md dentro del directorio 
 const mdFiles = (isPath) => {
     const mdExtensionFiles = path.extname(isPath) === '.md'
     return mdExtensionFiles;
@@ -96,6 +97,30 @@ const readFileContent = (arrayMds) => new Promise ((resolve) => {
     })
 });
 
+// FUNCION QUE OBTIENE UN ARREGLO DE PROMESAS QUE RETORNAN OBJETOS
+const httpsPromise = (arrayMds) => {
+    //console.log('acaaa: ', arrayMds)
+    const arrayPromes = arrayMds.map((obj) => fetch(obj.href)
+      .then((res) => ({
+        href: obj.href,
+        text: obj.text,
+        file: obj.fileName,
+        status: res.status,
+        ok: res.ok ? 'OK' : 'FAIL'
+      }))
+      .catch(() => ({
+        href: obj.href,
+        text: obj.text,
+        file: obj.fileName,
+        status: 500,
+        ok: 'FAIL'
+      })));
+    return Promise.all(arrayPromes);
+    
+    
+};
+  
+
 module.exports = {
     converterPathAbsolut, 
     validatePath,
@@ -103,5 +128,6 @@ module.exports = {
     dirFiles,
     getMdFiles,
     readLinks, 
-    readFileContent,     
+    readFileContent,
+    httpsPromise,     
 };

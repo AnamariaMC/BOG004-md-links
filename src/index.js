@@ -1,8 +1,8 @@
 const { converterPathAbsolut, 
     getMdFiles,
-    readLinks,
     readFileContent,
     validatePath,
+    httpsPromise
 } = require('./nodemethods');
 
 //Función mdLinks
@@ -21,14 +21,14 @@ const mdLinks = (args) => new Promise((resolve, reject) => {
   const mdFiles = getMdFiles(catchedPath, arrayMdFile)
   // console.log('todos los .md', mdFiles);
 
-  readFileContent(arrayMdFile)
+  const linksPromise = readFileContent(arrayMdFile)
   .then((objectLinks)=>{
     if(objectLinks.length === 0){
         // console.log('No se han encontrado links dentro del archivo md... ✿ ✧ | |');
     }else{
         // console.log('Lectura de los archivos:... ✿ ✧ | |');
         // console.log('Links obtenidos:... ✿ ✧ | |');
-        resolve(objectLinks);
+        return(objectLinks);
     }
   })
   .catch((error)=>{
@@ -36,6 +36,13 @@ const mdLinks = (args) => new Promise((resolve, reject) => {
       reject(error, errorMessage)
   });
 
+  linksPromise.then(links => {
+        //console.log('que es links ? :', links)
+        httpsPromise(links).then(response =>{
+          console.log('esto sale ? :', response)
+        });
+    });
+ 
 });
 
 module.exports = mdLinks;

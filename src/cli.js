@@ -16,5 +16,6 @@ mdLinks([ 'C:\\Program Files\\nodejs\\node.exe',
   })
   .catch((error)=>{
       const errorMessage = 'Error'
-      reject(error, errorMessage)
+      //reject(error, errorMessage)
+      console.log(error, errorMessage)
   });
