@@ -6,27 +6,27 @@ const { converterPathAbsolut,
 } = require('./nodemethods');
 
 //Función mdLinks
-const mdLinks = (path, option) => new Promise((resolve, reject) => {
+const mdLinks = (path, option = {validate:false}) => new Promise((resolve, reject) => {
   //entrega la RUTA ABSOLUTA 
   const absolutePath = converterPathAbsolut(path);
-  //Revisa si la RUTA es VALIDA ✿ 
+  //Revisa si la RUTA es VALIDA  
   const validatePathRes = validatePath(absolutePath);
   //trae la función recursiva para leer archivos
   let arrayMdFile = []
   if (validatePathRes === false) {
-    resolve('| ✿ NO EXISTEN ARCHIVOS ✿ |');
+    reject('|✧ Ruta no valida ✧ |');
   } else if (validatePathRes) {
     const mdFiles = getMdFiles(absolutePath, arrayMdFile)
     //console.log('archivos encontrados', mdFiles );
     if (mdFiles.length === 0) {
-      resolve('directorio vacio')
+      reject('|✧ El directorio esta vacio ✧ |')
 
     } else {
       readFileContent(arrayMdFile)
         .then((objectLinks) => {
           //console.log('objectlinks', objectLinks);
           if (objectLinks.length === 0) {
-            reject('|✧ No se han encontrado links dentro del archivo md. ✧ | |');
+            reject('|✧ No se han encontrado links dentro del archivo md. ✧ |');
           } else {
             if (option.validate === true) {
               httpsPromise(objectLinks).then(response => {

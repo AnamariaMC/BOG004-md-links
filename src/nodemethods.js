@@ -75,7 +75,6 @@ const readLinks = (content, isPath) => new Promise ((resolve) => {
         });
         resolve (arrayLinks)        
     } else if (links === null){
-        //console.log('que es resolve', resolve([]))
         resolve ([]);
     }
 });

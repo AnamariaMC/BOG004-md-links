@@ -8,7 +8,7 @@ const arguments = process.argv.slice(2);
 
 switch (arguments.length) {
     case 0:
-        console.log(chalk.redBright.bold('| ✿ PLEASE, ENTER A PATH ✿ |'));
+        console.log(chalk.redBright.bold('| ✿ Ingresa una ruta ✿ |'));
         break;
     case 1:
         mdLinks(arguments[0], { validate: false })

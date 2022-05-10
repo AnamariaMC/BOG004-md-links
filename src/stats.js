@@ -33,5 +33,5 @@ module.exports = {
     arrayTemplate,
     statusTemplate,
     totalLinks,
-    
+       
 }
