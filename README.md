@@ -112,7 +112,7 @@ PS C:\Users\AnamariaMC\Documents\laboratoria\BOG004-md-links> md-links ./mds --v
 
 El proyecto fue desrrollado a partir de la construcción de un Diagrama de flujo.
 
-![diagrama-de-flujo]()
+[diagrama-de-flujo](https://github.com/AnamariaMC/BOG004-md-links/blob/main/md-links.drawio%20(1).png)
 
 Anamaria Medina Cañas.&#128515;
 
