@@ -2,13 +2,13 @@
 const mdLinks = require('./index.js');
 const process = require('process');
 const chalk = require('chalk');
-const { arrayTemplate, statusTemplate, totalLinks } = require("./stats.js");
+const { arrayTemplate, statusTemplate, totalLinks, totalLinksBroken } = require("./stats.js");
 
 const arguments = process.argv.slice(2);
 
 switch (arguments.length) {
     case 0:
-        console.log(chalk.redBright.bold('| ✿ Ingresa una ruta ✿ |'));
+        console.log(chalk.redBright.bold('| ✧ INGRESA UNA RUTA ✧ |'));
         break;
     case 1:
         mdLinks(arguments[0], { validate: false })
@@ -18,9 +18,9 @@ switch (arguments.length) {
             .catch((err) => console.log(chalk.redBright.bold(err)));
             break;
     case 2:
-        //console.log('argumento[1]', arguments[1]);
+        
         if (arguments[1] === '--validate') {
-            // console.log('argumento[0]', arguments[0]);
+            
                 mdLinks(arguments[0], { validate: true })
                     .then((response) => {
                         console.log(`${statusTemplate(response)}`);
@@ -33,21 +33,18 @@ switch (arguments.length) {
                     })
                 .catch((err) => console.log(chalk.redBright.bold(err)));
             } 
-            // else if (argumentos[1] === '--help') {
-            //   console.log(chalk.cyan.bold(help));
-            // } 
-            else console.log(chalk.redBright.bold('| ✿ INVALID OPTION ✿ |'));
+            
+            else console.log(chalk.redBright.bold('| ✧ OPCIÓN INVALIDA ✧ |'));
             break;
     case 3:
         if ((arguments[1] === '--validate' && arguments[2] === '--stats') || (arguments[1] === '--stats' && arguments[2] === '--validate')) {
             mdLinks(arguments[0], { validate: true })
                 .then(response => {
-                console.log(`${totalLinks(response)}`);
-                console.log(`${statusTemplate(response)}`);
+                console.log(`${totalLinksBroken(response)}`);
                 })
                 .catch((err) => console.log(chalk.redBright.bold(err)));
-        } else console.log(chalk.redBright.bold('| ✿ INVALID OPTIONS ✿ |'));
+        } else console.log(chalk.redBright.bold('| ✧ OPCIÓN INVALIDA  ✧ |'));
         break;
         default:
-        console.log(chalk.redBright.bold('| ✿ INCORRECT DATA INPUT ✿ |'));           
+        console.log(chalk.redBright.bold('| ✧ COMANDO INCORRECTO ✧ |'));           
 }

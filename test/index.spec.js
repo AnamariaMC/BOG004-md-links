@@ -37,12 +37,12 @@ describe('mdLinks', () => {
     return mdLinks(rootLinks, {validate:false}).then(e => expect(e).toEqual(arrayLinks))
   })
   it('Debe retornar un mensaje de ruta no valida', () => {
-    return mdLinks(rootLinkbad, {validate:true}).catch(e => expect(e).toMatch('|✧ Ruta no valida ✧ |'))
+    return mdLinks(rootLinkbad, {validate:true}).catch(e => expect(e).toMatch('|✧ LA RUTA NO ES VALIDA ✧ |'))
   })
   it('Debe retornar el mensaje de no hay links', () => {
-  return mdLinks(rootWithoutLinks, {validate:true}).catch(e => expect(e).toMatch("|✧ No se han encontrado links dentro del archivo md. ✧ |"))
+  return mdLinks(rootWithoutLinks, {validate:true}).catch(e => expect(e).toMatch("|✧ NO SE HAN ENCONTRADO LINKS EN EL ARCHIVO .md ✧ |"))
   })
   it('Debe retornar mensaje de directorio vacio', () => {
-    return mdLinks(emptyroute, {validate:true}).catch(e => expect(e).toMatch("|✧ El directorio esta vacio ✧ |"))
+    return mdLinks(emptyroute, {validate:true}).catch(e => expect(e).toMatch("|✧ EL DIRECTORIO ESTA VACIO ✧ |"))
   })
 });
